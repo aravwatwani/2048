@@ -12,15 +12,16 @@ import javax.swing.JTextField;
 import javax.swing.Timer;
 
 public class BoardGUI extends JPanel implements KeyListener, ActionListener {
-	private Tile[][] b;
-	private Board data;
-	private Color[] colors;
+	protected Tile[][] b;
+	protected Board data;
+	protected Color[] colors;
+	protected int speed = 60;
 	Timer t; // used for bot
 
 	public BoardGUI() {
 		b = new Tile[4][4];
 		colors = new Color[11];
-		t = new Timer(1000, this);
+		t = new Timer(1000/speed, this);
 		setup(new int[][] {});
 		t.start(); // calls a method every second
 	}
@@ -28,7 +29,7 @@ public class BoardGUI extends JPanel implements KeyListener, ActionListener {
 	public BoardGUI(int[][] d) {
 		b = new Tile[4][4];
 		colors = new Color[11];
-		t = new Timer(1000, this);
+		t = new Timer(1000/speed, this);
 		setup(d);
 		t.start();
 	}
@@ -91,18 +92,18 @@ public class BoardGUI extends JPanel implements KeyListener, ActionListener {
 		/* call the helper methods for the Board object data */
 
 		switch (arg0.getKeyCode()) {
-		case 39:
-			data.right();
-			break;
-		case 37:
-			data.left();
-			break;
-		case 38:
-			data.up();
-			break;
-		case 40:
-			data.down(); 
-			break;
+			case 39:
+				data.right();
+				break;
+			case 37:
+				data.left();
+				break;
+			case 38:
+				data.up();
+				break;
+			case 40:
+				data.down();
+				break;
 		}
 
 		data.populateOne();

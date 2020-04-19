@@ -67,12 +67,11 @@ public class Board {
 	 */
 
 	public void populateOne() {
-		System.out.println(tilesOccupied);
+		// System.out.println(tilesOccupied);
 		// find an empty space on the board and randomly populate either a 2 or
 		// 4 at that location
 		if (tilesOccupied == 16)
 			return;
-
 		boolean check = false; // boolean to check if there is empty space
 		for (int i = 0; i < 4; i++) {
 			for (int j = 0; j < 4; j++) {
@@ -98,21 +97,6 @@ public class Board {
 		tilesOccupied++;
 	}
 
-	/*
-	 * 
-	 * Given an array of integers, slide all non-zero elements to the right.
-	 * 
-	 * zero elements are considered open spots.
-	 * 
-	 * example:
-	 * 
-	 * [0 2 0 2]->[0 0 2 2]
-	 * 
-	 * [2 0 0 2]->[0 0 2 2]
-	 * 
-	 * [4 0 0 0]->[0 0 0 4]
-	 */
-
 	public void slideRight(int[] row) {
 
 		for (int i = row.length - 1; i >= 0; i--) {
@@ -133,7 +117,6 @@ public class Board {
 	}
 
 	public void slideRight() { // slides right so no space on left
-
 		// go through 2D array, move all digits as far right as possible
 		for (int i = 0; i < board.length; i++) {
 			slideRight(board[i]);
@@ -249,21 +232,6 @@ public class Board {
 		}
 	}
 
-	/*
-	 * Given the 2D array, board, combineRight will take adjacent numbers that
-	 * are the same and combine them (add them).
-	 * 
-	 * After adding them together, one of the numbers is zeroed out. For
-	 * example, if row 0 contained [0 0 4 4],
-	 * 
-	 * a call to combineRight will produce [0 0 0 8]. If row 1 contained [2 2 2
-	 * 2], a call to combineRight will
-	 * 
-	 * produce [0 4 0 4].
-	 * 
-	 * Notice that the left element is zeroed out.
-	 */
-
 	public void combineRight() {
 		for (int i = 0; i < board.length; i++) {
 			for (int j = board[i].length - 1; j >= 1; j--) {
@@ -275,11 +243,6 @@ public class Board {
 			}
 		}
 	}
-
-	/*
-	 * same behavior as combineRight but the right element is zeroed out when
-	 * two elements are combined
-	 */
 
 	public void combineLeft() {
 
@@ -294,11 +257,6 @@ public class Board {
 		}
 	}
 
-	/*
-	 * same behavior as combineRight but the bottom element is zeroed out when
-	 * two elements are combined
-	 */
-
 	private void combineUp() {
 		for (int i = 1; i < board.length; i++) {
 			for (int j = 0; j < board[0].length; j++) {
@@ -311,11 +269,6 @@ public class Board {
 		}
 	}
 
-	/*
-	 * same behavior as combineRight but the top element is zeroed out when two
-	 * elements are combined
-	 */
-
 	private void combineDown() {
 		for (int i = 0; i < board.length - 1; i++) {
 			for (int j = 0; j < board[0].length; j++) {
@@ -327,10 +280,6 @@ public class Board {
 			}
 		}
 	}
-
-	// reminder: these are the methods that will ultimately invoke a series of
-	// methods
-	// the combine and slide methods should not worry about each other's methods
 
 	public void left() {
 		slideLeft(); // high level command to simplify when left key is pressed

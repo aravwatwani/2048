@@ -43,14 +43,14 @@ public class Tile extends JLabel {
 		try {
 
 			if(val>256) {
-				Font bigFont = new Font("Serif", Font.BOLD, 20);
+				Font bigFont = new Font("Helvetica Neue", Font.BOLD, 20);
 				setFont(bigFont);
 			}else if(val>256){
-				Font bigFont = new Font("Serif", Font.BOLD, 40);
+				Font bigFont = new Font("Helvetica Neue", Font.BOLD, 40);
 				setFont(bigFont);
 			}else {
 			
-				Font bigFont = new Font("Serif", Font.BOLD, 55);
+				Font bigFont = new Font("Helvetica Neue", Font.BOLD, 55);
 				setFont(bigFont);
 			}
 			

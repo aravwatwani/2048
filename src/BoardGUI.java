@@ -55,7 +55,7 @@ public class BoardGUI extends JPanel implements KeyListener, ActionListener {
 		colors[9] = new Color(0xedcc61);
 		colors[10] = new Color(0xf3c92f);
 
-		Font bigFont = new Font("Serif", Font.BOLD, 55);
+		Font bigFont = new Font("Helvetica Neue", Font.ITALIC, 55);
 		GridLayout g = new GridLayout(4, 4);
 		frame.setLayout(g);
 

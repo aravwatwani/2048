@@ -21,7 +21,7 @@ public class BoardGUI extends JPanel implements KeyListener, ActionListener {
 	public BoardGUI() {
 		b = new Tile[4][4];
 		colors = new Color[11];
-		t = new Timer(1000/speed, this);
+		t = new Timer(1000 / speed, this);
 		setup(new int[][] {});
 		t.start(); // calls a method every second
 	}
@@ -29,7 +29,7 @@ public class BoardGUI extends JPanel implements KeyListener, ActionListener {
 	public BoardGUI(int[][] d) {
 		b = new Tile[4][4];
 		colors = new Color[11];
-		t = new Timer(1000/speed, this);
+		t = new Timer(1000 / speed, this);
 		setup(d);
 		t.start();
 	}

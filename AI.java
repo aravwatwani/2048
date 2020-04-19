@@ -3,22 +3,28 @@ import java.awt.event.ActionEvent;
 
 public class AI extends BoardGUI {
     private boolean runAI;
+    private NeuralNetwork nn;
 
-    public AI(){
+    public AI() {
         super();
         runAI = true;
+        nn = new NeuralNetwork(16, 20, 4, 3);
     }
-    public AI(int[][] d){
+
+    public AI(int[][] d) {
         super(d);
         runAI = true;
+        nn = new NeuralNetwork(16, 20, 4, 3);
     }
 
     @Override
-	public void keyPressed(KeyEvent arg0) {
-        if(arg0.getKeyCode() == 32){
+    public void keyPressed(KeyEvent arg0) {
+        if (arg0.getKeyCode() == 32) {
             runAI = !runAI;
-            if(runAI) t.start();
-            else t.stop();
+            if (runAI)
+                t.start();
+            else
+                t.stop();
             return;
         }
 
@@ -33,29 +39,59 @@ public class AI extends BoardGUI {
                 data.up();
                 break;
             case 40:
-                data.down(); 
+                data.down();
                 break;
         }
 
-            update();
-            /** reset the game if all tiles are populated **/
-            if (data.gameOver()) {
-                // data = new Board();
-                // update();
-                runAI = true;
-            }
+        update();
+        /** reset the game if all tiles are populated **/
+        if (data.gameOver()) {
+            // data = new Board();
+            // update();
+            runAI = true;
+        }
     }
 
     @Override
-	public void actionPerformed(ActionEvent arg0) {
-        int rand = (int) (Math.random()*4);
-        if(rand == 0) data.left();
-        if(rand == 1) data.right();
-        if(rand == 2) data.up();
-        if(rand == 3) data.down();
+    public void actionPerformed(ActionEvent arg0) {
+
+        // new ai algorithm
+
+        float[] inputsArr = data.flattenBoard();
+        float[] output = nn.output(inputsArr);
+
+        while (true) {
+            float max = Float.MIN_VALUE;
+            int mind = 0;
+            for (int i = 0; i < 4; i++) {
+                if (output[i] > max) {
+                    mind = i;
+                    max = output[i];
+                }
+            }
+            output[mind] = Float.MIN_VALUE;
+            if (data.canMove(mind)) {
+                switch (mind) {
+                    case 0:
+                        data.left();
+                        break;
+                    case 1:
+                        data.right();
+                        break;
+                    case 2:
+                        data.up();
+                        break;
+                    case 3:
+                        data.down();
+                        break;
+                }
+                break;
+            }
+
+        }
 
         update();
-        if(data.gameOver()){
+        if (data.gameOver()) {
             runAI = false;
             t.stop();
         }

@@ -4,18 +4,17 @@ public class Board {
 
 	private int[][] board; // holds state of game
 	private Random rnd = new Random(0); // setup random # generator
-	private int tilesOccupied = 2; // tiles occupied to use populate function
+	private int tilesOccupied; // tiles occupied to use populate function
 
 	/* default constructor for board */
 	// constructors must match exactly the name
 	// of the class.
 	public Board() {
-
 		// instantiate the board
+		tilesOccupied = 0;
 		board = new int[4][4];
 		populateOne(); // populates board
 		populateOne(); // populates board
-
 	}
 
 	/*
@@ -36,9 +35,9 @@ public class Board {
 	public String toString() {
 
 		/*
-		 * Use the String formatter to pad the numbers with leading 0s so that
-		 * the print out does not become jagged An example is shown below.
-		 * String str = String.format("%04d", 9); // 0009 int x = 30;
+		 * Use the String formatter to pad the numbers with leading 0s so that the print
+		 * out does not become jagged An example is shown below. String str =
+		 * String.format("%04d", 9); // 0009 int x = 30;
 		 * System.out.println(String.format("%04d",x));
 		 */
 		String str = "";
@@ -235,7 +234,8 @@ public class Board {
 	public void combineRight() {
 		for (int i = 0; i < board.length; i++) {
 			for (int j = board[i].length - 1; j >= 1; j--) {
-				if (board[i][j] == board[i][j - 1] && board[i][j] != 0) { // check if two numbers before combined are the same
+				if (board[i][j] == board[i][j - 1] && board[i][j] != 0) { // check if two numbers before combined are
+																			// the same
 					board[i][j] *= 2; // combines
 					board[i][j - 1] = 0; // sets initial place to 0
 					tilesOccupied--; // reduces the tile occupied
@@ -248,10 +248,11 @@ public class Board {
 
 		for (int i = 0; i < board.length; i++) {
 			for (int j = 1; j < board[i].length; j++) {
-				if (board[i][j] == board[i][j - 1] && board[i][j] != 0) { // check if two numbers before combined are the same
+				if (board[i][j] == board[i][j - 1] && board[i][j] != 0) { // check if two numbers before combined are
+																			// the same
 					board[i][j - 1] *= 2; // combines
 					board[i][j] = 0; // sets initial place to 0
-					tilesOccupied--;  // reduces the tile occupied
+					tilesOccupied--; // reduces the tile occupied
 				}
 			}
 		}
@@ -260,10 +261,11 @@ public class Board {
 	private void combineUp() {
 		for (int i = 1; i < board.length; i++) {
 			for (int j = 0; j < board[0].length; j++) {
-				if (board[i - 1][j] == board[i][j] && board[i][j] != 0) { // check if two numbers before combined are the same
+				if (board[i - 1][j] == board[i][j] && board[i][j] != 0) { // check if two numbers before combined are
+																			// the same
 					board[i - 1][j] *= 2; // combines
 					board[i][j] = 0; // sets initial place to 0
-					tilesOccupied--;  // reduces the tile occupied
+					tilesOccupied--; // reduces the tile occupied
 				}
 			}
 		}
@@ -272,53 +274,141 @@ public class Board {
 	private void combineDown() {
 		for (int i = 0; i < board.length - 1; i++) {
 			for (int j = 0; j < board[0].length; j++) {
-				if (board[i][j] == board[i + 1][j] && board[i][j] != 0) { // check if two numbers before combined are the same
+				if (board[i][j] == board[i + 1][j] && board[i][j] != 0) { // check if two numbers before combined are
+																			// the same
 					board[i + 1][j] *= 2; // combines
 					board[i][j] = 0; // sets initial place to 0
-					tilesOccupied--;  // reduces the tile occupied
+					tilesOccupied--; // reduces the tile occupied
 				}
 			}
 		}
 	}
 
 	public void left() {
-		slideLeft(); // high level command to simplify when left key is pressed
-		combineLeft();
-		slideLeft();
+		if (canMove(0)) {
+			slideLeft(); // high level command to simplify when left key is pressed
+			combineLeft();
+			slideLeft();
+			populateOne();
+		}
 	}
 
 	public void right() {
-		slideRight(); // high level command to simplify when right key is pressed
-		combineRight();
-		slideRight();
+		if (canMove(1)) {
+			slideRight(); // high level command to simplify when right key is pressed
+			combineRight();
+			slideRight();
+			populateOne();
+		}
 	}
 
 	public void up() {
-		slideUp(); // high level command to simplify when up key is pressed
-		combineUp();
-		slideUp();
+		if (canMove(2)) {
+			slideUp(); // high level command to simplify when up key is pressed
+			combineUp();
+			slideUp();
+			populateOne();
+		}
 	}
 
 	public void down() {
-		slideDown(); // high level command to simplify when down key is pressed
-		combineDown();
-		slideDown();
+		if (canMove(3)) {
+			slideDown(); // high level command to simplify when down key is pressed
+			combineDown();
+			slideDown();
+			populateOne();
+		}
+	}
+
+	public boolean canMove(int d) {
+		if (d == 0) {
+			for (int i = 0; i < board.length; i++) {
+				for (int j = 0; j < board[0].length - 1; j++) {
+					if (board[i][j] == board[i][j + 1] || (board[i][j] == 0 && board[i][j + 1] > 0))
+						return true;
+				}
+			}
+			return false;
+		} else if (d == 1) {
+			for (int i = 0; i < board.length; i++) {
+				for (int j = 0; j < board[0].length - 1; j++) {
+					if (board[i][j] == board[i][j + 1] || (board[i][j] > 0 && board[i][j + 1] == 0))
+						return true;
+				}
+			}
+			return false;
+		} else if (d == 2) {
+			for (int i = 0; i < board.length - 1; i++) {
+				for (int j = 0; j < board[0].length; j++) {
+					if (board[i][j] == board[i + 1][j] || (board[i][j] == 0 && board[i + 1][j] > 0))
+						return true;
+				}
+			}
+			return false;
+		} else {
+			for (int i = 0; i < board.length - 1; i++) {
+				for (int j = 0; j < board[0].length; j++) {
+					if (board[i][j] == board[i + 1][j] || (board[i][j] > 0 && board[i + 1][j] == 0))
+						return true;
+				}
+			}
+			return false;
+		}
 	}
 
 	public boolean gameOver() {
-		return false;
+		if (tilesOccupied != board.length * board[0].length) {
+			return false;
+		}
+
+		for (int i = 0; i < board.length; i++) {
+			for (int j = 0; j < board[0].length - 1; j++) {
+				if (board[i][j] == board[i][j + 1]) {
+					return false;
+				}
+			}
+		}
+
+		for (int i = 0; i < board.length - 1; i++) {
+			for (int j = 0; j < board[0].length; j++) {
+				if (board[i][j] == board[i + 1][j]) {
+					return false;
+				}
+			}
+		}
+		return true;
 	}
 
 	public int[][] getBoard() {
 		return board;
 	}
 
+	public float[] flattenBoard() {
+		float[] flat = new float[board.length * board[0].length];
+
+		for (int i = 0; i < board.length; i++) {
+			for (int j = 0; j < board[0].length; j++) {
+				flat[i * board.length + j] = board[i][j];
+			}
+		}
+		return flat;
+	}
+
 	// populate with a given 2d array
 	public void populate(int[][] arr) {
+		board = new int[4][4];
+		tilesOccupied = 0;
 		for (int r = 0; r < arr.length; r++) {
 			for (int c = 0; c < arr[r].length; c++) {
+				if (board[r][c] != 0) {
+					tilesOccupied++;
+				}
 				board[r][c] = arr[r][c];
 			}
+		}
+		if (tilesOccupied == 0) {
+			populateOne();
+			populateOne();
 		}
 	}
 

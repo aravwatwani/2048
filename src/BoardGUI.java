@@ -5,31 +5,44 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.Timer;
 
 public class BoardGUI extends JPanel implements KeyListener, ActionListener {
-	private Tile[][] b;
-	private Board data;
-	private Color[] colors;
+	protected Tile[][] b;
+	protected Board data;
+	protected Color[] colors;
+	protected int speed = 60;
+	protected boolean draw;
 	Timer t; // used for bot
 
 	public BoardGUI() {
+		draw = true;
 		b = new Tile[4][4];
 		colors = new Color[11];
-		t = new Timer(1000, this);
+		t = new Timer(1000 / speed, this);
 		setup(new int[][] {});
-		t.start(); // calls a method every second
+	}
+
+	public BoardGUI(boolean draw) {
+		this.draw = draw;
+		b = new Tile[4][4];
+		colors = new Color[11];
+		t = new Timer(1000 / speed, this);
+		setup(new int[][] {});
 	}
 
 	public BoardGUI(int[][] d) {
+		draw = true;
 		b = new Tile[4][4];
 		colors = new Color[11];
-		t = new Timer(1000, this);
+		t = new Timer(1000 / speed, this);
 		setup(d);
+	}
+
+	public void start() {
 		t.start();
 	}
 
@@ -38,6 +51,10 @@ public class BoardGUI extends JPanel implements KeyListener, ActionListener {
 	 */
 
 	public void setup(int[][] d) {
+		data = new Board();
+		data.populate(d);
+		if (!draw)
+			return;
 		JFrame frame = new JFrame("2048");
 		frame.setSize(400, 450);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -69,14 +86,15 @@ public class BoardGUI extends JPanel implements KeyListener, ActionListener {
 				frame.add(b[i][j]);
 			}
 		}
-		data = new Board();
-		data.populate(d);
+
 		update();
 		frame.setVisible(true);
 
 	}
 
 	public void update() {
+		if (!draw)
+			return;
 		for (int r = 0; r < 4; r++) {
 			for (int c = 0; c < 4; c++) {
 				b[r][c].setValue(data.getBoard()[r][c]);
@@ -91,18 +109,18 @@ public class BoardGUI extends JPanel implements KeyListener, ActionListener {
 		/* call the helper methods for the Board object data */
 
 		switch (arg0.getKeyCode()) {
-		case 39:
-			data.right();
-			break;
-		case 37:
-			data.left();
-			break;
-		case 38:
-			data.up();
-			break;
-		case 40:
-			data.down(); 
-			break;
+			case 39:
+				data.right();
+				break;
+			case 37:
+				data.left();
+				break;
+			case 38:
+				data.up();
+				break;
+			case 40:
+				data.down();
+				break;
 		}
 
 		data.populateOne();

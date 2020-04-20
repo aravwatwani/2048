@@ -1,32 +1,60 @@
-import java.awt.event.KeyEvent;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 
 public class AI extends BoardGUI {
-    private boolean runAI;
+    private boolean runAI, gameOver, mod;
     private NeuralNetwork nn;
 
     public AI() {
         super();
-        runAI = true;
+        mod = true;
+        runAI = false;
+        gameOver = false;
+        nn = new NeuralNetwork(16, 20, 4, 3);
+    }
+
+    public AI(boolean a, boolean b) {
+        super(a);
+        mod = b;
+        runAI = false;
+        gameOver = false;
         nn = new NeuralNetwork(16, 20, 4, 3);
     }
 
     public AI(int[][] d) {
         super(d);
-        runAI = true;
-        nn = new NeuralNetwork(16, 20, 4, 3);
+        mod = true;
+        runAI = false;
+        gameOver = false;
+        nn = new NeuralNetwork(d.length * d[0].length, 20, 4, 3);
     }
 
     @Override
     public void keyPressed(KeyEvent arg0) {
+        // TODO Auto-generated method stub
+        /* call the helper methods for the Board object data */
+        if (!mod)
+            return;
+
         if (arg0.getKeyCode() == 32) {
-            runAI = !runAI;
-            if (runAI)
-                t.start();
-            else
-                t.stop();
+            if (gameOver) {
+                data = new Board();
+                update();
+                gameOver = false;
+                if (runAI)
+                    t.start();
+            } else {
+                runAI = !runAI;
+                if (runAI)
+                    t.start();
+                else
+                    t.stop();
+            }
             return;
         }
+
+        if (runAI || gameOver)
+            return;
 
         switch (arg0.getKeyCode()) {
             case 39:
@@ -44,24 +72,28 @@ public class AI extends BoardGUI {
         }
 
         update();
+
         /** reset the game if all tiles are populated **/
         if (data.gameOver()) {
-            // data = new Board();
-            // update();
-            runAI = true;
+            gameOver = true;
         }
     }
 
-    @Override
-    public void actionPerformed(ActionEvent arg0) {
+    public NeuralNetwork getNN() {
+        return nn;
+    }
 
-        // new ai algorithm
+    public void reset(NeuralNetwork n) {
+        nn = n;
+        data = new Board();
+    }
 
+    public void AIstep() {
         float[] inputsArr = data.flattenBoard();
         float[] output = nn.output(inputsArr);
 
-        while (true) {
-            float max = Float.MIN_VALUE;
+        for (int n = 0; n < 4; n++) {
+            float max = -Float.MAX_VALUE;
             int mind = 0;
             for (int i = 0; i < 4; i++) {
                 if (output[i] > max) {
@@ -69,7 +101,7 @@ public class AI extends BoardGUI {
                     max = output[i];
                 }
             }
-            output[mind] = Float.MIN_VALUE;
+            output[mind] = -Float.MAX_VALUE;
             if (data.canMove(mind)) {
                 switch (mind) {
                     case 0:
@@ -87,13 +119,25 @@ public class AI extends BoardGUI {
                 }
                 break;
             }
-
         }
 
+        // every move call populate and update
         update();
+
         if (data.gameOver()) {
-            runAI = false;
-            t.stop();
+            gameOver = true;
         }
+    }
+
+    public boolean gameOver() {
+        return gameOver;
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent arg0) {
+        // TODO Auto-generated method stub
+        AIstep();
+        if (gameOver)
+            t.stop();
     }
 }

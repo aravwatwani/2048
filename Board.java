@@ -4,17 +4,17 @@ public class Board {
 
 	private int[][] board; // holds state of game
 	private Random rnd = new Random(0); // setup random # generator
-	private int tilesOccupied = 2; // tiles occupied to use populate function
+	private int tilesOccupied; // tiles occupied to use populate function
 
 	/* default constructor for board */
 	// constructors must match exactly the name
 	// of the class.
 	public Board() {
 		// instantiate the board
+		tilesOccupied = 0;
 		board = new int[4][4];
 		populateOne(); // populates board
 		populateOne(); // populates board
-
 	}
 
 	/*
@@ -329,7 +329,7 @@ public class Board {
 				}
 			}
 			return false;
-		} else if (d == 2) {
+		} else if (d == 1) {
 			for (int i = 0; i < board.length; i++) {
 				for (int j = 0; j < board[0].length - 1; j++) {
 					if (board[i][j] == board[i][j + 1] || (board[i][j] > 0 && board[i][j + 1] == 0))
@@ -396,10 +396,19 @@ public class Board {
 
 	// populate with a given 2d array
 	public void populate(int[][] arr) {
+		board = new int[4][4];
+		tilesOccupied = 0;
 		for (int r = 0; r < arr.length; r++) {
 			for (int c = 0; c < arr[r].length; c++) {
+				if (board[r][c] != 0) {
+					tilesOccupied++;
+				}
 				board[r][c] = arr[r][c];
 			}
+		}
+		if (tilesOccupied == 0) {
+			populateOne();
+			populateOne();
 		}
 	}
 

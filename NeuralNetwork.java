@@ -40,19 +40,14 @@ public class NeuralNetwork {
 
 		Matrix output_ip = weights[weights.length - 1].dot(curr_bias);
 		Matrix output = output_ip.activate();
-        
-        return output.toArray();
-        /* 
-		float max = -Integer.MAX_VALUE;
-		int ret = 0;
-		for(int i = 0; i<this.oNodes; i++) {
-			if(output.toArray()[i]>max) {
-				max = output.toArray()[i];
-				ret = i;
-			}
-		}
 
-		return ret; */
+		return output.toArray();
+		/*
+		 * float max = -Integer.MAX_VALUE; int ret = 0; for(int i = 0; i<this.oNodes;
+		 * i++) { if(output.toArray()[i]>max) { max = output.toArray()[i]; ret = i; } }
+		 * 
+		 * return ret;
+		 */
 	}
 
 	public NeuralNetwork crossover(NeuralNetwork partner) {
@@ -77,19 +72,19 @@ public class NeuralNetwork {
 			weights[i] = weight[i];
 		}
 	}
-	
+
 	public String toString() {
 		String ret = "";
 		int row = 0;
-		
-		for(int i = 0; i<weights.length; i++) {
+
+		for (int i = 0; i < weights.length; i++) {
 			Matrix m = weights[i];
 			float[][] arr = m.getArray();
-			for(int j = 0; j<arr.length; j++) {
-				for(int k = 0; k<arr[0].length; k++) {
-					ret+=arr[j][k]+" ";
+			for (int j = 0; j < arr.length; j++) {
+				for (int k = 0; k < arr[0].length; k++) {
+					ret += arr[j][k] + " ";
 				}
-				ret+="\n";
+				ret += "\n";
 			}
 		}
 		return ret;
